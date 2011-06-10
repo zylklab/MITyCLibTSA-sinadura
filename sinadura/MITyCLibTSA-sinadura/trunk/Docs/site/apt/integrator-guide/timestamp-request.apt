@@ -1,0 +1,179 @@
+            ------
+            Ejemplo de petición de sello de tiempo
+            ------
+            Ministerio de Industria, Turismo y Comercio
+            ------
+
+Ejemplo de petición de sello de tiempo
+
+  El objetivo de este ejemplo es mostrar los pasos necesarios para realizar una
+petición de sellado de tiempo. El código completo del ejemplo se puede ver 
+{{{../xref-test/es/mityc/javasign/ts/examples/TimestampRequest.html}aquí}}.
+También se puede ver el Javadoc asociado al ejemplo {{{../testapidocs/es/mityc/javasign/ts/examples/TimestampRequest.html}aquí}}.
+
+  Los pasos principales para realizar una petición de sellado de tiempo contra 
+una TSA (TimeStamp Authority) son los siguientes:
+
+  [[1]] Crear la instancia del cliente {{{../apidocs/es/mityc/firmaJava/ts/TSCliente.html}TSCliente}}:
+
++---+
+TSCliente cliente = new TSCliente(TSA_URL, ALGORITHM);
++---+
+
+  Como se puede observar, para la instanciación de un cliente de sellado de tiempo son necesarios dos parámetros:
+
+  * TSA_URL: Se corresponde con la URL a la que se harán las peticiones.
+
+  * ALGORITHM: Se corresponde con el algoritmo del hash de los sellos de tiempo.
+
+  []
+
+  [[2]] Realización de la petición y obtención de resultado como un array de bytes:
+  
++---+
+byte[] result;
+try {
+    result = cliente.generarSelloTiempo(DATA);
+} catch (TSClienteError e) {
+    (... Error generando el sello de tiempo ...)
+}
++---+
+
+  [[3]] En este momento se dispone del sello de tiempo como un array de bytes. 
+Sin embargo, es habitual querer convertirlos a un objeto de alto nivel. En el 
+ejemplo, que utiliza la librería criptográfica {{{http://www.bouncycastle.org/}Bouncy Castle}}, 
+se convierten los bytes a un objeto de la clase <TimeStampToken>:
+
++---+
+TimeStampToken timeStampToken;
+try {
+    timeStampToken = new TimeStampToken(new CMSSignedData(result));
+} catch (TSPException e) {
+    (... Error parseando el sello de tiempo ...)
+} catch (IOException e) {
+    (... Error parseando el sello de tiempo ...)
+} catch (CMSException e) {
+    (... Error parseando el sello de tiempo ...)
+}
++---+
+
+  [[4]] Mediante el objeto <TimeStampToken> anterior ya se podrían consultar las
+  propiedades del token. Algunas propiedades que pueden resultar interesantes son las siguientes:
+  
+  * Número de serie del token:
+  
++---+
+timeStampToken.getTimeStampInfo().getSerialNumber()
++---+
+
+  * Fecha de generación del token:
+  
++---+
+timeStampToken.getTimeStampInfo().getGenTime()
++---+
+
+  * OID de la política del token:
+  
++---+
+timeStampToken.getTimeStampInfo().getPolicy()
++---+
+
+  * OID del algoritmo del hash:
+  
++---+
+timeStampToken.getTimeStampInfo().getMessageImprintAlgOID()
++---+
+
+  []
+
+  []
+  
+  Además de los pasos indicados anteriormente, puede ser necesario realizar alguna 
+configuración extra si se está ante uno de los casos mostrados a continuación.
+  
+* Petición a una TSA por SSL que requiere autenticación mediante certificados 
+  
+  En este caso será necesario realizar la siguiente configuración del cliente de
+sellado de tiempo antes de realizar la petición:
+  
++---+
+KeyStore ks = null;
+try {
+    ks = KeyStore.getInstance("PKCS12");
+    ks.load(this.getClass().getResourceAsStream(PKCS12_RESOURCE), PKCS12_PASSWORD.toCharArray());
+    KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
+    kmf.init(ks, PKCS12_PASSWORD.toCharArray());
+    TSCliente.setSSLManager(new SimpleSSLManager(new AllTrustedManager(), kmf.getKeyManagers()[0]));
+} catch (CertificateException e) {
+    (... Error configurando el cliente por SSL ...)
+} catch (KeyStoreException e) {
+    (... Error configurando el cliente por SSL ...)
+} catch (NoSuchAlgorithmException e) {
+    (... Error configurando el cliente por SSL ...)
+} catch (IOException e) {
+    (... Error configurando el cliente por SSL ...)
+} catch (UnrecoverableKeyException e) {
+    (... Error configurando el cliente por SSL ...)
+}
++---+
+
+  Como se puede observar, en el fragmento de código anterior se han utilizado
+las siguientes constantes:
+
+    * PKCS12_RESOURCE: Se corresponde con el recurso PKCS12 que contiene el certificado de identificación del usuario.
+
+    * PKCS12_PASSWORD: Se corresponde con la constraseña de acceso a la clave privada del usuario.
+  
+  []
+
+  Como se puede ver en la documentación de la clase {{{../apidocs/es/mityc/firmaJava/ts/TSCliente.html}TSCliente}}, el método
+<setSSLManager> recibe un objeto que implemente la interfaz <ISSLManager> (interfaz 
+que forma parte de la librería MITyCLibAPI del proyecto de Componentes). En el 
+ejemplo se ha usado una implementación simple (que también se encuentra en la 
+librería MITycLibAPI) aunque se podría haber utilizado cualquier otra implementación.
+Además, la clase <SimpleSSLManager> necesita de una implementación de la interfaz 
+<javax.net.ssl.X509TrustManager>, por lo que se ha utilizado una implementación básica 
+que confía en todos los certificados mediante (clase {{{../testapidocs/es/mityc/javasign/ts/AllTrustedManager.html}AllTrustedManager}}). 
+  
+* Salida a Internet a través de un proxy
+
+  En este caso será necesario realizar la siguiente configuración antes de
+realizar la petición de sellado de tiempo:
+
++---+
+System.setProperty("http.proxyHost", PROXY_SERVER);
+System.setProperty("http.proxyPort", Integer.toString(PROXY_PORT));
+if (IS_PROXY_AUTH) {
+    Authenticator.setDefault(new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            return new PasswordAuthentication(PROXY_USER, PROXY_PASSWORD.toCharArray());
+        }
+    });
+} else {
+    Authenticator.setDefault(null);
+}
++---+
+
+  Como se puede observar, en el fragmento de código anterior se han utilizado
+las siguientes constantes:
+
+    * PROXY_SERVER: Se corresponde con el puerto del proxy.
+
+    * PROXY_PORT: Se corresponde con el nombre del proxy.
+  
+    * IS_PROXY_AUTH: Indica si el proxy necesita autenticación o no.
+
+    * PROXY_USER: Se corresponde con el usuario para salir por el proxy, en el 
+caso de proxy autenticado.
+
+    * PROXY_PASSWORD: Se corresponde con la constraseña del usuario para salir 
+por el proxy, en el caso de proxy autenticado.
+  
+  []
+  
+  Por último, y para simplicar, se puede observar que se ha implementado una 
+<InnerClass> correspondiente a un <Authenticator> muy simple que devuelve directamente 
+el usuario y la constraseña. Siguiendo el sistema de autenticación estándar de 
+Java se podría haber implementado una clase mucho más compleja, siempre y cuando 
+heredase de la clase <java.net.Authenticator>.

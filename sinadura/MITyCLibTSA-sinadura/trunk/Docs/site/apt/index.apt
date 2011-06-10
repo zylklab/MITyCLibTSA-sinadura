@@ -1,0 +1,30 @@
+            ------
+            Introducción
+            ------
+            Ministerio de Industria, Turismo y Comercio
+            ------
+
+¿Qué es MITycLibTSA?
+
+  MITycLibTSA es una Librería que contiene la lógica necesaria para obtener y 
+manejar sellos de tiempo de autoridades de sellado a través de la implementación 
+del apéndice A.1 de la especificación {{{http://tools.ietf.org/html/rfc2560}RFC 2560}} 
+para tratar las peticiones y obtener dichos sellos de tiempo vía http teniendo 
+en cuenta las normas descritas en el punto 3.4 de la especificación 
+{{{http://tools.ietf.org/html/rfc3161}RFC 3161}}
+
+* Ejemplos de uso
+
+  Mediante los siguientes ejemplos, que se distribuyen con el código fuente de 
+  la librería, se pretente mostrar algunas de las funcionalidades 
+más comunes que un integrador puede necesitar de la librería MITyCLibTSA:
+
+  * {{{./integrator-guide/timestamp-request.html}Ejemplo de petición de sello de tiempo}}
+
+  * {{{./integrator-guide/timestamp-validation.html}Ejemplo de validación de sello de tiempo}}
+
+  []
+  
+  El objetivo de los ejemplos es que sean fáciles de entender y autocontenidos.
+Por este motivo, aspectos tales como la configuración, la gestión de errores o 
+los mensajes de logs no se han tenido en cuenta.

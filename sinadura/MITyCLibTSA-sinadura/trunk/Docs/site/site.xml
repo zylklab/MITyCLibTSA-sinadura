@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="MITycLibTSA">
+
+  <bannerLeft>
+    <name>MITycLibTSA</name>
+    <src>images/LogoMITyCLibTSA.png</src>
+  </bannerLeft>
+
+  <bannerRight>
+    <name>Avanza2</name>
+    <src>images/banner_avanza2.gif</src>
+  </bannerRight>
+
+  <publishDate position="none"/>
+
+  <version position="right"/>
+  
+  <body>
+    <links>
+      <item name="MITyCLibAPI" href="../MITyCLibAPI/index.html" />
+    </links>
+
+    <breadcrumbs>
+      <item name="MITyCLibTSA" href="./index.html"/>
+    </breadcrumbs>
+
+    <menu name="MITyCLibTSA">
+      <item name="Introducción" href="index.html"/>
+      <item name="FAQ" href="faq.html"/>
+    </menu>
+
+    <menu name="Ejemplos de uso">
+      <item name="Petición de sello de tiempo" href="integrator-guide/timestamp-request.html"/>
+      <item name="Validación de sello de tiempo" href="integrator-guide/timestamp-validation.html"/>
+    </menu>
+
+    <menu ref="reports"/>
+  </body>
+</project>
