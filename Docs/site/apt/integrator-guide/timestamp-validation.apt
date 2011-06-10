@@ -1,0 +1,60 @@
+            ------
+            Ejemplo de validación de sello de tiempo
+            ------
+            Ministerio de Industria, Turismo y Comercio
+            ------
+
+Ejemplo de validación de sello de tiempo
+
+  El objetivo de este ejemplo es mostrar los pasos necesarios para realizar una
+validación de un sello de tiempo. El código completo del ejemplo se puede ver 
+{{{../xref-test/es/mityc/javasign/ts/examples/TimestampValidation.html}aquí}}.
+También se puede ver el Javadoc asociado al ejemplo {{{../testapidocs/es/mityc/javasign/ts/examples/TimestampValidation.html}aquí}}.
+
+  Los pasos principales para validar un sello de tiempo son los siguientes:
+
+  [[1]] Invocar al método de validación del sello de tiempo de la clase 
+{{{../apidocs/es/mityc/firmaJava/ts/TSValidator.html}TSValidator}}:
+
++---+
+TSValidacion result;
+try {
+    result = TSValidator.validarSelloTiempo(Base64.decode(DATA1), Base64.decode(TOKEN_DATA1));
+} catch (NoSuchAlgorithmException e) {
+    (... Error validando el sello de tiempo ...)
+} catch (NoSuchProviderException e) {
+    (... Error validando el sello de tiempo ...)
+} catch (CertStoreException e) {
+    (... Error validando el sello de tiempo ...)
+} catch (TSPException e) {
+    (... Error validando el sello de tiempo ...)
+} catch (IOException e) {
+    (... Error validando el sello de tiempo ...)
+} catch (TSClienteError e) {
+    (... Error validando el sello de tiempo ...)
+}
++---+
+
+  Como se puede observar, los parámetros recibidos por el método <validarSelloTiempo> 
+son arrays de bytes. Puesto que las constantes usadas están declaradas como <String> 
+se puede hacer uso de la clase {{{../apidocs/es/mityc/firmaJava/ts/Base64.html}Base64}}
+para la decodificación de dichas constantes.
+
+  [[2]] Una vez que se tiene el resultado de la validación como un objeto 
+{{{../apidocs/es/mityc/firmaJava/ts/TSValidacion.html}TSValidacion}}
+se puede acceder a los datos de la misma. Algunos datos importantes:
+
+  * Si el resultado es una respuesta correcta (es decir, si el token que se validó es correcto)
+  
++---+
+result.isRespuesta()
++---+
+
+  * La fecha del token, que será <null> en el caso de que la respuesta no haya
+sido correcta:
+
++---+
+result.getFecha()
++---+
+
+  []
