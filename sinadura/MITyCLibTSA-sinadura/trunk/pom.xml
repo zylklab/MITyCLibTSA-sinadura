@@ -5,6 +5,19 @@
 		<artifactId>components</artifactId>
 		<version>1.0.4</version>
 	</parent>
+	
+	<scm>
+   		<connection>scm:svn:https://services.zylk.net/sinadura-repo/sinadura/MITyCLibTSA-sinadura/trunk</connection>
+   		<url>https://services.zylk.net/sinadura-repo/sinadura/MITyCLibTSA-sinadura/trunk</url>
+	</scm>
+	
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>MITyCLibTSA-sinadura</artifactId>
+	<packaging>jar</packaging>
+	<version>1.0.5-SNAPSHOT</version>
+	<name>MITyCLibTSA-sinadura</name>
+	
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -66,19 +79,14 @@
 	
 	<distributionManagement>
 		<repository>
-			<id>maven-nexus-zylk</id>
-			<name>sinadura-releases</name>
+			<id>maven-nexus-sinadura-repo</id>
+			<name>Maven Nexus at Zylk</name>
 			<url>https://services.zylk.net/nexus/content/repositories/sinadura-releases</url>
 		</repository>
 	</distributionManagement>
 
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>es.mityc.jumbo.adsi</groupId>
-	<artifactId>MITyCLibTSA-sinadura</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0.4</version>
-	<name>MITyCLibTSA-sinadura</name>
+	
 	<dependencies>
 		<dependency>
 			<groupId>es.mityc.jumbo.adsi</groupId>
