@@ -10,7 +10,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>MITyCLibTSA-sinadura</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.8-SNAPSHOT</version>
+	<version>1.0.9</version>
 	<name>MITyCLibTSA-sinadura</name>
 	
 	
@@ -105,17 +105,20 @@
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15</artifactId>
-			<version>1.46</version>
+			<version>1.43</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bctsp-jdk15</artifactId>
-			<version>1.46</version>
+			<version>1.43</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcmail-jdk15</artifactId>
-			<version>1.46</version>
+			<version>1.43</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
